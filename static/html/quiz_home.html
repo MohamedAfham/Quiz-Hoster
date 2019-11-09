@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="test">
+</div>
+
+{% for quiz in quizzes %}
+    <h1>{{quiz.title}}</h1>
+    <p>By:{{quiz.author}} difficulty:{{quiz.difficulty}}</p>
+    <p>{{quiz.quiz}}</p>
+{% endfor %}
+
+{% endblock %}
