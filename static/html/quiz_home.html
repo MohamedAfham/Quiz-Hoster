@@ -6,9 +6,16 @@
 </div>
 
 {% for quiz in quizzes %}
-    <h1>{{quiz.title}}</h1>
-    <p>By:{{quiz.author}} difficulty:{{quiz.difficulty}}</p>
-    <p>{{quiz.quiz}}</p>
+<article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <label class="mr-2" href="#">difficulty: {{ quiz.difficulty }}</label>
+            <small class="text-muted">author: {{ quiz.author }}</small>
+          </div>
+          <h2><a class="article-title" href="#">{{ quiz.title }}</a></h2>
+          <p class="article-content">{{ quiz.quiz }}</p>
+        </div>
+      </article>
 {% endfor %}
 
 {% endblock %}
