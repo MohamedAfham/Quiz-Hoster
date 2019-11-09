@@ -22,4 +22,5 @@ urlpatterns = [
 
     # path('', views.home),
     path('quiz/', include('quiz.urls')),
+    path('student/', include('student.urls')),
 ]
