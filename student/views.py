@@ -51,6 +51,13 @@ def login(request):
         return render(request, 'student_login.html', {'form':form} )
 
 def logout(request):
-    auth.logout(request)
-    messages.success(request, 'logout success!')
-    return redirect('student-login')
+    return render(request, 'student_logout.html')
+
+def logout_conform(request):
+    yes = request.GET.get('yes')
+    if yes is not None:
+        auth.logout(request)
+        messages.success(request, f'logout success!')
+        return redirect('student-login')
+    else:
+        return redirect('quiz-home')

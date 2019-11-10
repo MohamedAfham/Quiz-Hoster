@@ -1,35 +1,53 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 
 <div class="test">
 </div>
 
-{% for quiz in quizzes %}
-<article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata">
-            <small class="text-muted">Difficulty: 
-              {% if quiz.difficulty == 'Easy' %}
-                <a style="color: green;">{{ quiz.difficulty }}</a>
-              {% elif quiz.difficulty == 'Medium' %}
-                <a style="color: orange;">{{ quiz.difficulty }}</a>
-              {% elif quiz.difficulty == 'Hard' %}
-                <a style="color: red;">{{ quiz.difficulty }}</a>
-              {% else %}
-                <a style="color:black;">{{ quiz.difficulty }}</a> <!-- unknown difficulty -->
-              {% endif %}
-            </small>
-            <small class="text-muted"> | Author: {{ quiz.author }}</small>
-          </div>
-          <h3><a class="article-title" >{{ quiz.title }}</a></h3>
-          <p class="article-content">{{ quiz.quiz }}</p>
-          <input type="radio" name="answer" value="1">anser1<br>
-          <input type="radio" name="answer" value="2">anser2<br>
-          <input type="radio" name="answer" value="3">anser3<br>
-          <input type="radio" name="answer" value="4">anser4<br>
-        </div>
-      </article>
-{% endfor %}
+  {% for quiz in quizzes %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <small class="text-muted">Difficulty: 
+          {% if quiz.difficulty == 'Easy' %}
+          <a style="color: green;">{{ quiz.difficulty }}</a>
+          {% elif quiz.difficulty == 'Medium' %}
+          <a style="color: orange;">{{ quiz.difficulty }}</a>
+          {% elif quiz.difficulty == 'Hard' %}
+          <a style="color: red;">{{ quiz.difficulty }}</a>
+          {% else %}
+          <a style="color:black;">{{ quiz.difficulty }}</a> <!-- unknown difficulty -->
+          {% endif %}
+        </small>
+        <small class="text-muted"> | Author: {{ quiz.author }}</small>
+      </div>
+      <h3><a class="article-title" >{{ quiz.title }}</a></h3>
+      <p class="article-content">{{ quiz.quiz }}</p>
+      
+      <!-- temp -->
+      <link rel="stylesheet" type="text/css" href="{% static 'css/radio.css' %}">
+      <div>  
+          <label class="radio-container">One
+            <input type="radio" checked="checked" name="radio">
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio-container">Two
+            <input type="radio" name="radio">
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio-container">Three
+            <input type="radio" name="radio">
+            <span class="checkmark"></span>
+          </label>
+          <label class="radio-container">Four
+            <input type="radio" name="radio">
+            <span class="checkmark"></span>
+          </label>  
+    </div>
 
+
+  </article>
+  {% endfor %}
+  
 {% endblock %}

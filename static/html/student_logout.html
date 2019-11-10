@@ -1,0 +1,15 @@
+  
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <form action="conform">
+        <h6>Are you sure you really want to logout?</h6>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit" name="yes">Yes</button>
+            <button class="btn btn-outline-danger" type="submit" name="no">No</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
