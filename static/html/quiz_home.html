@@ -9,11 +9,25 @@
 <article class="media content-section">
         <div class="media-body">
           <div class="article-metadata">
-            <label class="mr-2" href="#">difficulty: {{ quiz.difficulty }}</label>
-            <small class="text-muted">author: {{ quiz.author }}</small>
+            <small class="text-muted">Difficulty: 
+              {% if quiz.difficulty == 'Easy' %}
+                <a style="color: green;">{{ quiz.difficulty }}</a>
+              {% elif quiz.difficulty == 'Medium' %}
+                <a style="color: orange;">{{ quiz.difficulty }}</a>
+              {% elif quiz.difficulty == 'Hard' %}
+                <a style="color: red;">{{ quiz.difficulty }}</a>
+              {% else %}
+                <a style="color:black;">{{ quiz.difficulty }}</a> <!-- unknown difficulty -->
+              {% endif %}
+            </small>
+            <small class="text-muted"> | Author: {{ quiz.author }}</small>
           </div>
-          <h2><a class="article-title" href="#">{{ quiz.title }}</a></h2>
+          <h3><a class="article-title" >{{ quiz.title }}</a></h3>
           <p class="article-content">{{ quiz.quiz }}</p>
+          <input type="radio" name="answer" value="1">anser1<br>
+          <input type="radio" name="answer" value="2">anser2<br>
+          <input type="radio" name="answer" value="3">anser3<br>
+          <input type="radio" name="answer" value="4">anser4<br>
         </div>
       </article>
 {% endfor %}

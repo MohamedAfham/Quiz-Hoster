@@ -1,25 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
-quizzes = [
-    {
-    'author':'thakee',
-    'title':'Genral IQ',
-    'difficulty':'E', ## E M H
-    'image':None,
-    'quiz': 'What\s the ...',
-    },
-    {
-    'author':'afham',
-    'title':'Country Flag',
-    'difficulty':'M',
-    'image':None,
-    'quiz': 'What\s the ...',
-    },
-]
-
+from .models import Quiz
 
 def quiz_home(request):
-    return render(request, 'quiz_home.html', {'quizzes':quizzes})
+    if request.user.is_authenticated:
+        quizzes = []
+        for quiz in Quiz.objects.all():
+            quizzes.append(
+                {
+                    'author':quiz.author,
+                    'title':quiz.title,
+                    'difficulty':quiz.difficulty,
+                    'image':None,
+                    'quiz':quiz.content,
+                }
+            )
+        return render(request, 'quiz_home.html', {'quizzes':quizzes, 'request':request})
+    else: 
+        messages.warning(request, f'Login Required')
+        return redirect('student-login')
 
 
 def quiz_about(request):
