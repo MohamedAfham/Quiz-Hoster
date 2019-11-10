@@ -9,6 +9,10 @@ __pycache__/
 # VS Code files
 .vscode
 
+# temp folder
+_temp
+media
+
 # Distribution / packaging
 .Python
 build/

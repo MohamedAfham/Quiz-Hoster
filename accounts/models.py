@@ -1,6 +1,37 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-from django.contrib.auth.forms import UserCreationForm
+class Student(models.Model):
+    index = models.CharField(max_length=20, primary_key=True)
+    student_name = models.CharField(max_length=30)
+    user = models.OneToOneField( User, on_delete= models.CASCADE )
+
+    @staticmethod
+    def create_student(index, name, password):
+        user = User.objects.create_user('student_'+index.upper(), password=password)
+        student = Student.objects.create(index=index.upper(), student_name=name, user=user)
+        return student
+    
+    def get_username(self):
+        return 'student_'+self.index
+
+    def __str__(self):
+        return self.student_name+'-'+self.index
+
+
+class Staff(models.Model):
+    staff_name = models.CharField(max_length=30, unique=True)
+    user = models.OneToOneField( User, on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_staff(name, password):
+        user = User.objects.create_user(username='staff_'+name, password=password)
+        staff = Staff.objects.create(staff_name=name, user=user)
+        return staff
+    
+    def __str__(self):
+        return self.staff_name
+
 
 # Forms and Validators #################################
 from django import forms
@@ -21,8 +52,9 @@ class UnicodeUsernameValidator(validators.RegexValidator):
     )
     flags = 0
 
+
 ## forms
-class RegisterForm(forms.Form):
+class StudentRegisterForm(forms.Form):
     name = forms.CharField(
         max_length=150, 
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
@@ -64,7 +96,7 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
 
-class LoginForm(forms.Form):
+class StudentLoginForm(forms.Form):
     index = forms.CharField(
         max_length=30, 
         help_text=_('Required. 30 characters or fewer. Letters must be Upper case'),
