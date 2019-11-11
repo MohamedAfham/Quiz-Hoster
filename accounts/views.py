@@ -18,7 +18,7 @@ def student_register(request):
             password = form.cleaned_data.get('password1')
             try:
                 student = Student.create_student(index, name, password)
-                messages.success(request, f'Account created for {name}, index : {index}, password : {password}')
+                messages.success(request, f'Account created for {name}, index : {index}')
                 auth.login(request, student.user)
                 return redirect('quiz-home')
             except IntegrityError as e:

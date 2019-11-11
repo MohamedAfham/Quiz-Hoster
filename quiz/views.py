@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .models import Quiz, Submission
 
 import math
-QUIZ_PER_PAGE = 6
+QUIZ_PER_PAGE = 3
 
 
 def get_progress(request):
