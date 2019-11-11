@@ -1,128 +1,54 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<div class="test">
-</div>
+<!-- <h1 class="display-4" >Quiz Home</h1> -->
 
-  {% for quiz in quizzes %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-          <span class="h3 pull-left">{{ quiz.title }}</span>
-        <!-- <h3><a class="article-title" style="float: left" >{{ quiz.title }}</a></h3> -->
-        <small class="text-muted">Difficulty: 
-          {% if quiz.difficulty == 'Easy' %}
-          <a style="color: green;">{{ quiz.difficulty }}</a>
-          {% elif quiz.difficulty == 'Medium' %}
-          <a style="color: orange;">{{ quiz.difficulty }}</a>
-          {% elif quiz.difficulty == 'Hard' %}
-          <a style="color: red;">{{ quiz.difficulty }}</a>
-          {% else %}
-          <a style="color:black;">{{ quiz.difficulty }}</a> <!-- unknown difficulty -->
-          {% endif %}
-        </small>
-        <small class="text-muted"> | Author: {{ quiz.author.staff_name }}</small>
-      </div>
-      
-      {% if quiz.image %}
-      <div class="text-center">
-          <img src={{ quiz.image.url }} class="rounded" width="100%" style="border-style:solid; border-width: 1px; border-color:slategray">
-      </div>
-      {% endif %}
-      <br><p class="article-content">{{ quiz.content }}</p>
-      <link rel="stylesheet" type="text/css" href="{% static 'css/radio.css' %}">
-      <div> 
+<!-- <div class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <span class="h3 pull-left">Rules</span>
+    </div>
+    <ul>
+      <li>rule 1</li>
+      <li>rule 2</li>
+      <li>rule 3</li>
+    </ul>
+  </div>
+</div> -->
 
-        <label class="radio-container">{{ quiz.answer1 }}
-          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a1"
-          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 1 %}
-          checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
-          >
-          <span class="checkmark"></span>
-        </label>
-        <label class="radio-container">{{ quiz.answer2 }}
-          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a2"
-          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 2 %}
-          checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
-          >
-          <span class="checkmark"></span>
-        </label>
-        <label class="radio-container">{{ quiz.answer3 }}
-          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a3"
-          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 3 %}
-          checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
-          >
-          <span class="checkmark"></span>
-        </label>
-        <label class="radio-container">{{ quiz.answer4 }}
-          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a4"
-          {% if answer == 4 %} checked {% endif %}
-          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 4 %}
-          checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
-          >
-          <span class="checkmark"></span>
-          </label>  
+<div class="media content-section">
+  <div>
+    <div class="article-metadata">
+      <h3>Rules</h3>
+    </div>
+    
+    <p>
+      The quiz consists of multiple choice questionnaire on the fundamental rights of the child. The winners will 
+      be chosen through an automatic draw from the names of the participants who have realized a perfect score.
+    </p>
+    <hr>
+    <p>
+      Participation in the quiz is free and open to all persons above 18 years old. 
+    </p>
+    <hr>
+    <p>
+      The quiz will be available from the 20 November 2016 to the 20 December 2016. The participant answers 13 questions and 
+      validates his or her participation by clicking on the final sending button, and by giving his or her personal information.
+    </p>
+    <hr>
+    <p>
+      The winners will be contacted by e-mail, in order to obtain their postal address where the prize will be sent to. From 
+      the moment the e-mail is sent, the winners have a month to accept their prize.
+    </p>
+
+    <form action="{% url 'quiz-page' 1 %}">
+        <div class="form-group float-right">
+          <button class="btn btn-outline-info" type="submit">Begin Quiz</button>
         </div>
-      </article>
-      
-      {% endfor %}
-      
-      
+      </form>
 
-    <form method="POST" id="submission_form" action="submit/">
-      {% csrf_token %}
-
-      {% for quiz in quizzes %}
-      <input type="hidden" name="{{quiz.id}}" id="q{{quiz.id}}" value="">
-      {% endfor %}
-
-    </form>
-      
-
-  <script>
-    function submitForms(){
-      setFormSubmitting();
-      var answers = {}
-      {% for quiz in quizzes %}
-      for (var i=1; i<5; i++){
-        if (document.getElementById("q{{ quiz.id }}_a"+i).checked){
-          answers[ "q{{ quiz.id }}" ] = i;
-          break;
-        }
-      }
-      {% endfor %}
-      console.log(answers);
-      for (var qid in answers){
-        document.getElementById(qid).value = answers[qid];
-      }
-      document.getElementById("submission_form").submit();
-    }
-  </script>
-
-   <!-- leaving page warning -->
-   <script>
-      var formSubmitting = false;
-      var setFormSubmitting = function() { formSubmitting = true; };
-
-      window.addEventListener("beforeunload", function (e) {
-      
-        if (formSubmitting) {
-          return undefined;
-      }
-
-      var confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
-      (e || window.event).returnValue = confirmationMessage; //Gecko + IE return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-      });
-  </script>
+  </div>
+</div>
   
-      <div class="float-right my-5">
-        <input class="btn btn-outline-info" type="button" value="Submit>" onclick="submitForms()"/>
-      </div><br>
 
-  
-{% endblock %}
+
+{% endblock content %}

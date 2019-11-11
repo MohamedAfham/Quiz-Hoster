@@ -17,9 +17,9 @@ def student_register(request):
             index = form.cleaned_data.get('index').upper()
             password = form.cleaned_data.get('password1')
             try:
-                Student.create_student(index, name, password)
+                student = Student.create_student(index, name, password)
                 messages.success(request, f'Account created for {name}, index : {index}, password : {password}')
-                auth.login(request, user)
+                auth.login(request, student.user)
                 return redirect('quiz-home')
             except IntegrityError as e:
                 messages.warning(request, f'Error: index already exists. (error_message={e})')
@@ -39,11 +39,12 @@ def student_login(request):
             if form.is_valid():
                 index = form.cleaned_data.get('index').upper()
                 password = form.cleaned_data.get('password')
-                student = Student.objects.get(index=index)
-                if student is not None:
+                if Student.objects.filter(index=index).exists():
+                    student = Student.objects.get(index=index)
                     user = authenticate(username=student.get_username(), password=password)
                     if user is not None:
                         auth.login(request, user)
+                        messages.success(request, 'logged in successfully!')
                         return redirect('quiz-home')
                 else:
                     messages.warning(request, 'Authentication failed. (check your index and password)')
@@ -53,8 +54,10 @@ def student_login(request):
             form  = StudentLoginForm()
         return render(request, 'student_login.html', {'form':form} )
 
+from quiz.views import get_progress
+
 def logout(request):
-    return render(request, 'account_logout.html')
+    return render(request, 'account_logout.html', {'progress':get_progress(request)})
 
 def logout_conform(request):
     yes = request.GET.get('yes')

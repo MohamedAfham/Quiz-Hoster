@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  {% for quiz in quizzes %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+          <span class="h3 pull-left">{{ quiz.title }}</span>
+        <!-- <h3><a class="article-title" style="float: left" >{{ quiz.title }}</a></h3> -->
+        <small class="text-muted">Difficulty: 
+          {% if quiz.difficulty == 'Easy' %}
+          <a style="color: green;">{{ quiz.difficulty }}</a>
+          {% elif quiz.difficulty == 'Medium' %}
+          <a style="color: orange;">{{ quiz.difficulty }}</a>
+          {% elif quiz.difficulty == 'Hard' %}
+          <a style="color: red;">{{ quiz.difficulty }}</a>
+          {% else %}
+          <a style="color:black;">{{ quiz.difficulty }}</a> <!-- unknown difficulty -->
+          {% endif %}
+        </small>
+        <small class="text-muted"> | Author: {{ quiz.author.staff_name }}</small>
+      </div>
+      
+      {% if quiz.image %}
+      <div class="text-center">
+          <img src={{ quiz.image.url }} class="rounded" width="100%" style="border-style:solid; border-width: 1px; border-color:slategray">
+      </div>
+      {% endif %}
+      <br><p class="article-content">{{ quiz.content }}</p>
+      <link rel="stylesheet" type="text/css" href="{% static 'css/radio.css' %}">
+      <div> 
+
+        <label class="radio-container">{{ quiz.answer1 }}
+          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a1"
+          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 1 %}
+          checked 
+          {% endif %} {% else %} {% endif %} {% endfor %}
+          >
+          <span class="checkmark"></span>
+        </label>
+        <label class="radio-container">{{ quiz.answer2 }}
+          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a2"
+          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 2 %}
+          checked 
+          {% endif %} {% else %} {% endif %} {% endfor %}
+          >
+          <span class="checkmark"></span>
+        </label>
+        <label class="radio-container">{{ quiz.answer3 }}
+          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a3"
+          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 3 %}
+          checked 
+          {% endif %} {% else %} {% endif %} {% endfor %}
+          >
+          <span class="checkmark"></span>
+        </label>
+        <label class="radio-container">{{ quiz.answer4 }}
+          <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a4"
+          {% if answer == 4 %} checked {% endif %}
+          {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 4 %}
+          checked 
+          {% endif %} {% else %} {% endif %} {% endfor %}
+          >
+          <span class="checkmark"></span>
+          </label>  
+        </div>
+      </div>
+      </article>
+      
+      {% endfor %}
+      
+      
+
+    <form method="POST" id="submission_form" action="{% url 'quiz-submit' %}">
+      {% csrf_token %}
+      <input type="hidden" id="next_page" name="next_page" value="">
+      {% for quiz in quizzes %}
+      <input type="hidden" name="{{quiz.id}}" id="q{{quiz.id}}" value="">
+      {% endfor %}
+
+    </form>
+      
+
+  <script>
+    function submitForms(next_page){
+      document.getElementById("next_page").value = next_page
+      setFormSubmitting();
+      var answers = {}
+      {% for quiz in quizzes %}
+      for (var i=1; i<5; i++){
+        if (document.getElementById("q{{ quiz.id }}_a"+i).checked){
+          answers[ "q{{ quiz.id }}" ] = i;
+          break;
+        }
+      }
+      {% endfor %}
+      console.log(answers);
+      for (var qid in answers){
+        document.getElementById(qid).value = answers[qid];
+      }
+      document.getElementById("submission_form").submit();
+    }
+  </script>
+
+   <!-- leaving page warning -->
+   <script>
+      var formSubmitting = false;
+      var setFormSubmitting = function() { formSubmitting = true; };
+
+      window.addEventListener("beforeunload", function (e) {
+      
+        if (formSubmitting) {
+          return undefined;
+      }
+
+      var confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+      (e || window.event).returnValue = confirmationMessage; //Gecko + IE return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+      });
+  </script>
+  
+  <!-- ---------------------------  PAGINATION  ----------------------------------------- -->
+<!-- <button onclick="submitForms()">button</button> -->
+  <div class="float-right my-5">
+      <ul class="pagination">
+        {% if pagination.previous_disabled %}
+          <li class="page-item disabled"><a class="page-link" href="">previous</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" onclick="submitForms({{pagination.previous_page_no}})">previous</a></li>
+        {% endif %}
+
+        {% for i in pagination.page_loop %}
+          {% if i == pagination.page_no %}
+            <li class="page-item active"><a class="page-link">{{i}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" onclick="submitForms({{i}})">{{i}}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if pagination.next_disabled %}
+          <li class="page-item"><a class="page-link" onclick="submitForms({{-1}})">Done</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link"  onclick="submitForms({{pagination.next_page_no}})">next</a></li>
+        {% endif %}
+
+      </ul>
+  
+  </div>
+
+{% endblock %}

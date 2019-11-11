@@ -1,5 +1,24 @@
-  
+
 {% extends "base.html" %}
+{% load static %}  
 {% block content %}
-    <h1>About Page</h1>
+
+<div class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <span class="h3 pull-left">About</span>
+        </div>
+
+        <div>
+            <br>
+            <img src="{% static 'images/windows.svg' %}" class="rounded" width="30%" style="margin-left:30%;">
+            <br> <br>
+            <p>
+                Microsoft Windows is a group of several graphical operating system families, all of which are developed, 
+                marketed and sold by Microsoft.
+            </p>
+        </div>
+
+    </div>
+</div>
 {% endblock content %}
