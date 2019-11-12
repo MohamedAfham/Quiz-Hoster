@@ -35,7 +35,7 @@
           <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a1"
           {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 1 %}
           checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
           >
           <span class="checkmark"></span>
         </label>
@@ -43,7 +43,7 @@
           <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a2"
           {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 2 %}
           checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
           >
           <span class="checkmark"></span>
         </label>
@@ -51,16 +51,15 @@
           <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a3"
           {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 3 %}
           checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
           >
           <span class="checkmark"></span>
         </label>
         <label class="radio-container">{{ quiz.answer4 }}
           <input type="radio" name="radio_q{{ quiz.id }}" id="q{{ quiz.id }}_a4"
-          {% if answer == 4 %} checked {% endif %}
           {% for qid, ans in answers.items %} {% if quiz.id == qid %} {% if ans == 4 %}
           checked 
-          {% endif %} {% else %} {% endif %} {% endfor %}
+          {% endif %} {% endif %} {% endfor %}
           >
           <span class="checkmark"></span>
           </label>  

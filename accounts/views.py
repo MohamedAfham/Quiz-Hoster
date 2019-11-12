@@ -54,10 +54,12 @@ def student_login(request):
             form  = StudentLoginForm()
         return render(request, 'student_login.html', {'form':form} )
 
-from quiz.views import get_progress
+from quiz.views import get_progress, get_result_progress
 
 def logout(request):
-    return render(request, 'account_logout.html', {'progress':get_progress(request)})
+    ctx = {'progress':get_progress(request),  'quiz_ended': Variable.objects.get(id=1).quiz_end, }
+    ctx.update(get_result_progress(request))
+    return render(request, 'account_logout.html', ctx)
 
 def logout_conform(request):
     yes = request.GET.get('yes')

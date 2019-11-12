@@ -7,4 +7,7 @@ urlpatterns = [
     path('page/<int:page_no>/', views.quiz_page, name='quiz-page' ),
     path('about/', views.quiz_about, name='quiz-about'),
     path('submit/', views.quiz_submit, name='quiz-submit'),
+
+    ## after quiz end
+    path('view_result/<int:page_no>/', views.quiz_view_result, name='quiz-view_result')
 ]

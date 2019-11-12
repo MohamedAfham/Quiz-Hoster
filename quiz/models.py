@@ -9,9 +9,9 @@ DIFICULTIES = (
 
 CORRECT_ANSWER = (
     (1, 1),
-    (1, 2),
-    (1, 3),
-    (1, 4),
+    (2, 2),
+    (3, 3),
+    (4, 4),
 )
 
 from accounts.models import Staff, Student
@@ -31,6 +31,7 @@ class Quiz(models.Model):
     def __str__(self):
         return str(self.id)+'. '+self.title
 
+## many to many relation field also do the same 
 class Submission(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
@@ -38,3 +39,23 @@ class Submission(models.Model):
 
     def __str__(self):
         return f'q{self.quiz.id}-{self.student.index}'
+
+## to store quiz variables
+class Variable(models.Model):
+    quiz_end = models.BooleanField(default=False)
+
+    ## for inheritance if variable is abstract singleton
+    ##class Meta:
+    ##    abstract = True
+    
+    def save(self, *args, **kwargs):
+        self.id = 1
+        super(Variable, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(id=1)
+        return obj
