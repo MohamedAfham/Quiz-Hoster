@@ -236,13 +236,14 @@ def quiz_feedback(request):
         ## check if student
         if not hasattr(request.user, 'student') :
             messages.warning(request, f'Login Required of a Student')
-            return redirect('student-login')
+            return redirect('quiz-about') ## TODO:
 
         if request.method == 'POST':
             form = FeedbackForm(request.POST)
             if form.is_valid():
                feedback = form.cleaned_data.get('feedback')
                Feedback.objects.create(student=request.user.student, feedback=feedback)
+               messages.success(request, f'Feedback sent successfully!')
                return redirect('quiz-about') ## TODO:
         else:
             form = FeedbackForm()
@@ -250,7 +251,6 @@ def quiz_feedback(request):
         ctx = { 'form': form, 'feedback_active':'active','quiz_ended': Variable.objects.get(id=1).quiz_end, }
         ctx.update(get_result_progress(request))
         return render(request, 'quiz_feedback.html', ctx )
-
 
     else: 
         messages.warning(request, f'Login Required')
