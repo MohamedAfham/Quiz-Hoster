@@ -110,7 +110,7 @@ class StudentRegisterForm(forms.Form):
 class StudentLoginForm(forms.Form):
     index = forms.CharField(
         max_length=30, 
-        help_text=_('Required. 30 characters or fewer. Letters must be Upper case'),
+        help_text=_('Required. 30 characters or fewer.'),
         validators=[UnicodeUsernameValidator()],
         error_messages={
             'unique': _("A user with that index already exists."),

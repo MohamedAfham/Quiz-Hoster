@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 from .models import Quiz, Submission, Variable
+from accounts.models import Student
 
 import math
 QUIZ_PER_PAGE = 3
@@ -12,6 +13,8 @@ def get_result_progress(request):
     if hasattr(request.user, 'student'):
         student = request.user.student
         submissions = Submission.objects.filter(student=student)
+    else:
+        return dict()
     quiz_count = Quiz.objects.all().count()
     correct_answers = 0
     wrong_answers = 0
@@ -198,6 +201,57 @@ def quiz_view_result(request, page_no):
         }
         ctx.update(get_result_progress(request))
         return render(request, 'quiz_view_result.html', ctx)
+    else: 
+        messages.warning(request, f'Login Required')
+        return redirect('student-login')
+
+
+def quiz_leaderboard(request):
+    if request.user.is_authenticated:
+        ## check quiz ended
+        var, created = Variable.objects.get_or_create(id=1)
+        if not var.quiz_end:
+            messages.warning(request, f'This will be available once the quiz ended.')
+            return redirect('quiz-page', 1)
+        
+        ctx = { 
+            'leaderboard_active':'active', 'quiz_ended': Variable.objects.get(id=1).quiz_end,
+            'lboard': Student.objects.all()  ## TODO: order them
+        }
+        ctx.update(get_result_progress(request))
+        return render(request, 'quiz_leaderboard.html',  ctx )
+    else: 
+        messages.warning(request, f'Login Required')
+        return redirect('student-login')
+
+from .models import FeedbackForm, Feedback
+def quiz_feedback(request):
+    if request.user.is_authenticated:
+        ## check quiz ended
+        var, created = Variable.objects.get_or_create(id=1)
+        if not var.quiz_end:
+            messages.warning(request, f'This will be available once the quiz ended.')
+            return redirect('quiz-page', 1)
+
+        ## check if student
+        if not hasattr(request.user, 'student') :
+            messages.warning(request, f'Login Required of a Student')
+            return redirect('student-login')
+
+        if request.method == 'POST':
+            form = FeedbackForm(request.POST)
+            if form.is_valid():
+               feedback = form.cleaned_data.get('feedback')
+               Feedback.objects.create(student=request.user.student, feedback=feedback)
+               return redirect('quiz-about') ## TODO:
+        else:
+            form = FeedbackForm()
+        
+        ctx = { 'form': form, 'feedback_active':'active','quiz_ended': Variable.objects.get(id=1).quiz_end, }
+        ctx.update(get_result_progress(request))
+        return render(request, 'quiz_feedback.html', ctx )
+
+
     else: 
         messages.warning(request, f'Login Required')
         return redirect('student-login')

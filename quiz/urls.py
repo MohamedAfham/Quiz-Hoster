@@ -9,5 +9,7 @@ urlpatterns = [
     path('submit/', views.quiz_submit, name='quiz-submit'),
 
     ## after quiz end
-    path('view_result/<int:page_no>/', views.quiz_view_result, name='quiz-view_result')
+    path('view_result/<int:page_no>/', views.quiz_view_result, name='quiz-view_result'),
+    path('leaderboard/', views.quiz_leaderboard, name='quiz-leaderboard'),
+    path('feedback/', views.quiz_feedback, name='quiz-feedback'),
 ]

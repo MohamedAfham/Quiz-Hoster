@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" >
+    <h3>Leaderboard</h3>
+</div>
+
+<table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Index</th>
+            <th scope="col">Name</th>
+            <th scope="col">Marks</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for student in lboard %}
+            <tr>
+                <td>rand_{{ student.user.id }}</td>
+                <td>{{student.index}}</th>
+                <td>{{student.student_name}}</td>
+                <td> will_be_calculated </td>
+            </tr>
+            {% endfor %}
+          
+        </tbody>
+      </table>
+
+
+
+{% endblock content %}

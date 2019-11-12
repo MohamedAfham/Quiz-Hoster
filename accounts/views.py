@@ -55,7 +55,7 @@ def student_login(request):
         return render(request, 'student_login.html', {'form':form} )
 
 from quiz.views import get_progress, get_result_progress
-
+from quiz.models import Variable
 def logout(request):
     ctx = {'progress':get_progress(request),  'quiz_ended': Variable.objects.get(id=1).quiz_end, }
     ctx.update(get_result_progress(request))

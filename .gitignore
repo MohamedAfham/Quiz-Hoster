@@ -12,6 +12,7 @@ __pycache__/
 # temp folder
 _temp
 media
+QuizHoster/settings.py
 
 # Distribution / packaging
 .Python

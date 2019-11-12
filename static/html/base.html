@@ -89,12 +89,14 @@
                 {% endif %}
 
                   
-                <p class='text-muted'>These will be available onece the quiz ended.
+                <p class='text-muted'>
+                  {% if not quiz_ended %}
+                  These will be available onece the quiz ended.
+                  {% endif %}
                   <ul class="list-group">
                     <a class="list-group-item list-group-item-action {{ view_result_active }}" href="{% url 'quiz-view_result' 1 %}">View My Results</a>
-                    <a class="list-group-item list-group-item-action {{ leaderboard_active }}">Leaderboard</a>
-                    <a class="list-group-item list-group-item-action {{ summary_active }}">Summary</a>
-                    <li class="list-group-item list-group-item-action {{ etc_active }}">etc</li>
+                    <a class="list-group-item list-group-item-action {{ leaderboard_active }}"  href="{% url 'quiz-leaderboard' %}">Leaderboard</a>
+                    <a class="list-group-item list-group-item-action {{ feedback_active }}" href="{% url 'quiz-feedback' %}" >Feedback</a>
                 </ul>
               </p>
             </div>

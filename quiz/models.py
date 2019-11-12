@@ -40,6 +40,14 @@ class Submission(models.Model):
     def __str__(self):
         return f'q{self.quiz.id}-{self.student.index}'
 
+class Feedback(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    feedback = models.TextField()
+
+from django import forms
+class FeedbackForm(forms.Form):
+    feedback = forms.CharField(widget=forms.Textarea)
+
 ## to store quiz variables
 class Variable(models.Model):
     quiz_end = models.BooleanField(default=False)
