@@ -13,6 +13,8 @@ __pycache__/
 _temp
 media
 QuizHoster/settings.py
+accounts/migrations/
+quiz/migrations/
 
 # Distribution / packaging
 .Python
