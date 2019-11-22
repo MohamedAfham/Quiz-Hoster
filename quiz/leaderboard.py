@@ -5,7 +5,12 @@ def no_of_attempts(quiz, Submission):
 
 ## returns True, False or None
 def is_ans_correct(quiz, student, Submission):
-    sub     = Submission.objects.filter(student=student, quiz=quiz)
+    try:
+        sub = Submission.objects.get(student=student, quiz=quiz)
+        return sub.answer == quiz.correct_answer
+    except Submission.DoesNotExist:
+        return None
+
     if not sub.exists(): return None
     else : return sub[0].answer == quiz.correct_answer
 
@@ -17,14 +22,13 @@ def get_leaderboard(Quiz, Student, Submission):
 
     for quiz in Quiz.objects.all():
         ## no_of_attempts(quiz, Submission)
+        pass
 
-        for student in Student.objects.all():
-            ## is_ans_correct(quiz, student, Submission)
-
-            ## marks = calculate_here()
-            ## lboard.append( (student, marks) )
-
-            pass
+    for student in Student.objects.all():
+        ## is_ans_correct(quiz, student, Submission)
+        ## marks = calculate_here()
+        ## lboard.append( (student, marks) )
+        pass
 
 
     return lboard
