@@ -39,7 +39,8 @@ def get_progress(request):
 
 
 def quiz_home(request):
-    ctx = {'progress':get_progress(request), 'quiz_ended':Variable.objects.get(id=1).quiz_end}
+    var, created = Variable.objects.get_or_create(id=1)
+    ctx = {'progress':get_progress(request), 'quiz_ended':var.quiz_end}
     ctx.update(get_result_progress(request))
     return render(request, 'quiz_home.html', ctx )
     
@@ -142,9 +143,10 @@ def quiz_view_result(request, page_no):
 
         ## check quiz ended
         var, created = Variable.objects.get_or_create(id=1)
-        if not var.quiz_end:
-            messages.warning(request, f'This will be available once the quiz ended.')
-            return redirect('quiz-page', 1)
+        if hasattr(request.user, 'student'):
+            if not var.quiz_end:
+                messages.warning(request, f'This will be available once the quiz ended.')
+                return redirect('quiz-page', 1)
 
         ## create render variables
         quizzes = []
@@ -206,17 +208,21 @@ def quiz_view_result(request, page_no):
         return redirect('student-login')
 
 
+from .leaderboard import get_leaderboard
 def quiz_leaderboard(request):
     if request.user.is_authenticated:
         ## check quiz ended
         var, created = Variable.objects.get_or_create(id=1)
-        if not var.quiz_end:
-            messages.warning(request, f'This will be available once the quiz ended.')
-            return redirect('quiz-page', 1)
-        
+        if hasattr(request.user, 'student'):
+            if not var.quiz_end:
+                messages.warning(request, f'This will be available once the quiz ended.')
+                return redirect('quiz-page', 1)
+
+        lboard = get_leaderboard(Quiz, Student, Submission)
+        lboard.sort( key = lambda tup:tup[1], reverse=True )
         ctx = { 
             'leaderboard_active':'active', 'quiz_ended': Variable.objects.get(id=1).quiz_end,
-            'lboard': Student.objects.all()  ## TODO: order them
+            'lboard': lboard  ## TODO: order them
         }
         ctx.update(get_result_progress(request))
         return render(request, 'quiz_leaderboard.html',  ctx )

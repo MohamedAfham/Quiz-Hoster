@@ -20,7 +20,6 @@ class Quiz(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images', blank=True, null=True)
     difficulty = models.CharField(max_length=10, choices=DIFICULTIES, default='Easy')
-    author = models.ForeignKey(Staff, on_delete=models.CASCADE)
     content = models.TextField(default="")
     answer1 = models.CharField(max_length=30, default="")
     answer2 = models.CharField(max_length=30, default="")

@@ -30,13 +30,14 @@ class Staff(models.Model):
     @staticmethod
     def create_staff(name, password):
         user = User.objects.create_user(username='staff_'+name, password=password)
-        user.is_staff = True
         user.user_permissions.set([
             Permission.objects.get(codename='add_quiz'),
             Permission.objects.get(codename='change_quiz'),
             Permission.objects.get(codename='delete_quiz'),
             Permission.objects.get(codename='view_quiz')
         ])
+        user.is_staff = True
+        user.save()
         staff = Staff.objects.create(staff_name=name, user=user)
         return staff
     
