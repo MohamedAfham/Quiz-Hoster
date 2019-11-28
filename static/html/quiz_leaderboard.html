@@ -5,19 +5,21 @@
     <h3>Leaderboard</h3>
 </div>
 
+<meta http-equiv="refresh" content="30">
+
 <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Rank</th>
-            <th scope="col">Index</th>
-            <th scope="col">Name</th>
-            <th scope="col">Marks</th>
+            <th scope="col">Team ID</th>
+            <th scope="col">Team Name</th>
+            <th scope="col">Score</th>
           </tr>
         </thead>
         <tbody>
-            {% for student, marks in lboard %}
+            {% for student, marks, rank in lboard %}
             <tr>
-                <td>{{ student.user.id }}</td>
+                <td>{{ rank }}</td>
                 <td>{{ student.index}}</th>
                 <td>{{ student.student_name}}</td>
                 <td>{{ marks }}</td>

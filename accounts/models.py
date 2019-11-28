@@ -92,6 +92,7 @@ class StudentRegisterForm(forms.Form):
 
 class StudentLoginForm(forms.Form):
     index = forms.CharField(
+        label="Team ID",
         max_length=30, 
         help_text=_('Required. 30 characters or fewer.'),
     )

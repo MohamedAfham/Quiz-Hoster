@@ -21,10 +21,10 @@ class Quiz(models.Model):
     image = models.ImageField(upload_to='images', blank=True, null=True)
     difficulty = models.CharField(max_length=10, choices=DIFICULTIES, default='Easy')
     content = models.TextField(default="")
-    answer1 = models.CharField(max_length=30, default="")
-    answer2 = models.CharField(max_length=30, default="")
-    answer3 = models.CharField(max_length=30, default="")
-    answer4 = models.CharField(max_length=30, default="")
+    answer1 = models.CharField(max_length=130, default="")
+    answer2 = models.CharField(max_length=130, default="")
+    answer3 = models.CharField(max_length=130, default="")
+    answer4 = models.CharField(max_length=130, default="")
     correct_answer = models.IntegerField(choices=CORRECT_ANSWER, default=1)
 
     def __str__(self):

@@ -6,7 +6,7 @@ from .models import Quiz, Submission, Variable
 from accounts.models import Student
 
 import math
-QUIZ_PER_PAGE = 3
+QUIZ_PER_PAGE = 5
 
 def get_result_progress(request):
     submissions = Submission.objects.none()
@@ -212,14 +212,18 @@ from .leaderboard import get_leaderboard
 def quiz_leaderboard(request):
     if request.user.is_authenticated:
         ## check quiz ended
-        var, created = Variable.objects.get_or_create(id=1)
-        if hasattr(request.user, 'student'):
-            if not var.quiz_end:
-                messages.warning(request, f'This will be available once the quiz ended.')
-                return redirect('quiz-page', 1)
+        if not request.user.is_staff:
+            var, created = Variable.objects.get_or_create(id=1)
+            if hasattr(request.user, 'student'):
+                if not var.quiz_end:
+                    messages.warning(request, f'This will be available once the quiz ended.')
+                    return redirect('quiz-page', 1)
 
         lboard = get_leaderboard(Quiz, Student, Submission)
         lboard.sort( key = lambda tup:tup[1], reverse=True )
+        lboard = list(map(lambda pair: [pair[0],'%.2f'%pair[1]],lboard))
+        for i in range(len(lboard)):
+            lboard[i].append(i+1)
         ctx = { 
             'leaderboard_active':'active', 'quiz_ended': Variable.objects.get(id=1).quiz_end,
             'lboard': lboard  ## TODO: order them

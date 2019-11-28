@@ -10,6 +10,9 @@ from django.contrib import messages
 from django.db import IntegrityError
 
 def student_register(request):
+    if not request.user.is_staff:
+        messages.warning(request, "you don't have access to the register page")
+        return redirect('student-login')
     if request.method == 'POST':
         form = StudentRegisterForm(request.POST)
         if form.is_valid():
@@ -19,8 +22,8 @@ def student_register(request):
             try:
                 student = Student.create_student(index, name, password)
                 messages.success(request, f'Account created for {name}, index : {index}')
-                auth.login(request, student.user)
-                return redirect('quiz-home')
+                ##auth.login(request, student.user)
+                return redirect('student-register')
             except IntegrityError as e:
                 messages.warning(request, f'Error: index already exists. (error_message={e})')
                 return redirect('student-register')

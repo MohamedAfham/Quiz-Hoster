@@ -17,19 +17,19 @@ def is_ans_correct(quiz, student, Submission):
 ## ---------------------------------------------------------------------
 
 ## TODO: override this
+from .backend_algorithm import get_final
 def get_leaderboard(Quiz, Student, Submission):
-    lboard = [] ## return [ (student, marks) ]
-
+    
+    array = []
     for quiz in Quiz.objects.all():
-        ## no_of_attempts(quiz, Submission)
-        pass
+        student_subs = []
+        for student in Student.objects.all():
+            student_subs.append(is_ans_correct(quiz, student, Submission))
+        array.append(student_subs)
 
-    for student in Student.objects.all():
-        ## is_ans_correct(quiz, student, Submission)
-        ## marks = calculate_here()
-        ## lboard.append( (student, marks) )
-        pass
+    return get_final(Student, Quiz, array)
 
+    
 
-    return lboard
+    
     
